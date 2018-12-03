@@ -8,20 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <title>Multi-objective scheduling</title>
+
+    <title>SB Admin - Tables</title>
 
     <!-- Bootstrap core CSS-->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom fonts for this template-->
-    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Page level plugin CSS-->
-    <link href="/static/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="/static/css/sb-admin.css" rel="stylesheet">
+    <link href="css/sb-admin.css" rel="stylesheet">
 
   </head>
 
@@ -29,18 +29,70 @@
 
     <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-      <a class="navbar-brand mr-1" href="index.html">Demo</a>
+      <a class="navbar-brand mr-1" href="index.html">Start Bootstrap</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
       </button>
+
+      <!-- Navbar Search -->
+      <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Navbar -->
+      <ul class="navbar-nav ml-auto ml-md-0">
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-bell fa-fw"></i>
+            <span class="badge badge-danger">9+</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-envelope fa-fw"></i>
+            <span class="badge badge-danger">7</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown no-arrow">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user-circle fa-fw"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="#">Settings</a>
+            <a class="dropdown-item" href="#">Activity Log</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+          </div>
+        </li>
+      </ul>
+
     </nav>
 
     <div id="wrapper">
 
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
@@ -67,7 +119,7 @@
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Charts</span></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" href="tables.html">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span></a>
@@ -83,118 +135,8 @@
             <li class="breadcrumb-item">
               <a href="#">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">Overview</li>
+            <li class="breadcrumb-item active">Tables</li>
           </ol>
-
-          <!-- Icon Cards-->
-          <div class="row">
-            <div class="col-xl-3 col-sm-6 mb-3">
-              <div class="card text-white bg-primary o-hidden h-100">
-                <div class="card-body">
-                  <div class="card-body-icon">
-                    <i class="fas fa-fw fa-comments"></i>
-                  </div>
-                  <div class="mr-5">26 New Messages!</div>
-                </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
-                </a>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-3">
-              <div class="card text-white bg-warning o-hidden h-100">
-                <div class="card-body">
-                  <div class="card-body-icon">
-                    <i class="fas fa-fw fa-list"></i>
-                  </div>
-                  <div class="mr-5">11 New Tasks!</div>
-                </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
-                </a>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-3">
-              <div class="card text-white bg-success o-hidden h-100">
-                <div class="card-body">
-                  <div class="card-body-icon">
-                    <i class="fas fa-fw fa-shopping-cart"></i>
-                  </div>
-                  <div class="mr-5">123 New Orders!</div>
-                </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
-                </a>
-              </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-3">
-              <div class="card text-white bg-danger o-hidden h-100">
-                <div class="card-body">
-                  <div class="card-body-icon">
-                    <i class="fas fa-fw fa-life-ring"></i>
-                  </div>
-                  <div class="mr-5">13 New Tickets!</div>
-                </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Area Chart Example-->
-          <div class="card mb-3">
-            <div class="card-header">
-              <i class="fas fa-chart-area"></i>
-              Area Chart Example</div>
-            <div class="card-body">
-              <div id="plotly-div"></div>
-                <script>
-                  trace1 = {
-                    x : {{x}},
-                    y : {{y}},
-                    z : {{z}},
-              marker: {
-                color: [-1.0679492803, 1.94796322778, -0.410664306961, 1.2095440438, 0.152993766911, -0.301145795736, -1.50245240132, 0.934251578542, -0.0113241826583, -0.473947185987, 0.756282507924, 0.0047762745039, 0.111577298524, -1.95970276528, -0.443982852555, 0.0119127032851, -1.19789058262, -0.218363585276, 1.89001109981, 2.74346487491, -0.691750268403, -0.227789027962, 1.13305603119, -0.0490265462131, 1.93336519824, -0.609547421292, -2.05208703589, -1.3571045968, -0.65845707602, -0.679944921277, -0.348189141281, 0.126048484086, 0.682167783905, -0.7296295426, 1.75361975089, 1.76322327904, -0.276924691585, -0.0621148168085, -0.463774101319, -2.20897004542, 0.0626086614727, -1.52983920876, -1.65498022041, 0.29436536254, 2.04168323238, -1.93244853609, 1.76471928808, -1.07120096557, 0.00230215850098, -0.69446166698, 0.30611780597, 0.102241456306, -2.41684325849, -0.981092469403, -1.4838415471, 1.32772742818, -0.21001072215, -0.842482038435, 0.00549158777092, 0.490439330983, 0.494484505559, 0.922641755697, 0.895614346115, 1.31414690052, 0.283709197349, 0.579669800363, 1.13453609421, 1.17478558744, -0.439578286947, -1.75581718249, -1.14241795582, -0.131009760515, -1.80628744754, 0.0806708489067, -1.1252012008, -0.472658645908, 1.5630263191, 0.477064874419, 1.57917529347, -1.57001920838, 2.17974645451, 1.58672232354, 1.07401040515, -0.10432809375, 0.00752794914796, 0.258290596695, 0.73102185259, 2.09260353456, -1.23388052941, -0.867513348127, 2.26991745438, 0.813889065366, 0.887892999496, 0.133410029721, -0.694956595008, 2.0752695096, -0.230439030443, -1.00928401535, 0.443182197132, 0.311056233825, 1.33367989094, 0.375909544236, 0.0774462991422, -1.50842358055, -0.190894247406, 0.697948116715, 1.34016025065, 0.304253623542, -0.145133660362, -0.057843165577, 0.642818348538, 1.57777527064, 0.46699183235, 0.21416641108, -1.39522970396, 0.323602495631, -0.247311974611, 1.61353562604, -0.158950926234, 0.167012635413, 0.260257061154, -1.51247859604, -0.327362632377, 0.201841449274, 1.23053885653, -0.15068439257, -0.0334133985041, 0.091042734768, 0.15846733642, 1.08234939166, 0.0358675523209, 0.875420854698, 1.28012623733, 1.11615252353, -0.475212301868, -0.0828058470977, -0.550340438213, -1.15356863444, -0.65774765342, -0.237718713247, 0.263577993485, 0.0893029178422, 1.9977590017, -0.896919572168, 0.653422167576, -0.495802722668, 0.171887713782, 0.367152542559, -1.69441625802, -0.495926076555, 0.162513018216, -1.96039158382, 1.40947017794, -1.79543838879, -0.504964533886, 0.508448722758, 0.781330493478, 0.794919227991, 0.0720397909217, 2.76515236411, 0.969386916163, -0.354557926894, -0.978854924925, -1.580747749, -1.03221448139, 1.05930627242, 0.0818912474006, -2.15141866741, 0.284372052151, -0.301674389096, -0.62545225889, -0.657568155021, -1.10274061608, 0.792049449807, 0.808000268941, 1.20065227371, 0.0317504856464, 0.791406533178, -0.493774666182, -0.0443968389754, 1.4139020364, 0.302403124233, 0.00845128802654, -1.35259982327, 1.68119878155, 0.949303926297, -0.0827755079484, 0.0986670365578, 1.45287998672, 0.627115250231, -1.45088086452, -0.117449914267, 2.18167513076, 1.3322002533, -0.836771727109, 0.0493498633103, -0.917042055561, 0.137987198686, -0.0702000780343, -1.95316542241, 0.119318718118, -1.38672615489, 0.170869514878, 0.431053759933, 0.261737639898, 0.9293824075, 0.28390923999, -1.58775587943, -1.24375250174, -0.353935230955, -0.447485709014, -0.345068721068, -0.599822090759, -0.505726999441, 0.600480502728, -0.862301523595, 0.696252069546, -1.7716476809, 0.481575271096, 2.24757893147, -0.073290135375, 2.15840142499, 2.52852249566, -0.625763604615, -0.784533342996, -1.11803564122, 0.093914895595, 0.721839783622, -0.92688718475, 0.334438004991, 0.428832008525, -0.280371583349, 0.925970573188, -0.599808435114, 0.550688678734, -0.00267607448886, -1.03952744725, -0.0577285867231, 0.902040481735, -0.507899251966, -0.256735415511, -1.32066677907, 1.82239541549, 1.398742597, -0.890400836077, -0.583339561073, 2.12050396948, 0.939964762316, -0.0483520301717, -0.953146129902, 0.960580284754, 0.541596177957, 0.431669847574, 0.0958300077431, 1.06192086795, 2.41832722599, 0.514839192994, -0.829122290382, -0.356658419578, 1.53361476298, 0.931140319721, 0.12417389459, 0.124935267063, -1.62308363134, 0.10901991086, -0.346743094554, 1.11034417455, -0.652384908647, 0.137380231894, -0.0236659894835, -0.744785995289, 1.50455206154, 1.55845807774, 0.0813608502732, -0.255797675199, 0.143620504807, -0.0629503362736, 0.523043965387, -0.977047802532, -0.512579509516, -0.472541196797, 0.0261305185742, -0.528719189779, -1.21291870154, 0.23895756983, -0.606181168539, -1.65766396406, 0.376127211774, -0.492914655054, -0.715758553869, 0.116005643527, 0.682383888529, 0.152590911235, -1.78970127429, 1.06613693175, -0.5472347469, 0.223094143724, -0.709705351508, 0.512157475286, 1.98354117366, 2.29217863205, -2.52361042986, 0.612425190182, -0.0100746716751, 0.054626166175, -2.27182923998, 0.420409173251, -0.928638342586, -0.933336642995, 2.09589652642, 0.0829878334682, 0.676098700958, -0.272717854237, 1.99765959827, 0.702717159558, -0.449420599062, 0.946525278315, 0.07839944096, -0.885724671232, 0.653528848899, 0.31416583922, -1.77243645592, -0.185632343564, 0.564617941426, 0.902508956804, 0.346978494373, 1.56547238422, -0.0491700151391, 0.428160063147, 1.35100286292, 0.883580672248, -2.00782142832, -1.82841594203, -1.2772191143, -0.798169265649, 0.979348408329, 0.308884781846, -1.0184956853, -0.623250345558, 1.37575793059, 1.31544369601, 1.63505227509, -0.111210344205, -0.381336491987, -0.144308932436, 0.552345057947, 0.922517458369, -0.445132594576, -0.39951913346, -1.5779710564, 1.08337553366, 0.825060505359, -1.4875094011, -0.405368072565, 0.356135236903, -0.328578089728, 0.0854086873257, -0.0756806470669, 1.17153352811, 1.56912969773, -0.702405886345, 0.261400533744, 1.05481209891, -0.315006601777, -0.571095077196, 0.292373384515, -0.144617613723, -0.482481187384, 1.71716236946, 1.80569819176, -1.54757449707, -0.876848509021, 0.393688709094, 1.02619794034, -1.2458126366, 0.419466728988, 0.0813504376983, -1.58706643328, 1.10515062121, -1.56619482905, 1.32844744332, 0.725226773252, 1.1204622414, 0.332805722736, -0.355344854685, -0.025587375734, 0.617694496593, 0.372380596513, 0.160403392313, 0.81700273452, 0.727608157731, 1.5408511389, -0.473339370165, 1.01816625543, -1.11572613759, 1.31153939129, -0.174436565719, 0.604461675545, -1.81487651934, -0.914515061317],
-                colorscale: 'Viridis',
-                colorsrc: 'AsheeHuang:3:5d8d3c',
-                opacity: 0.8,
-                size: 5
-              },
-              mode: 'markers',
-              type: 'scatter3d',
-              uid: 'cb50ba14-8da6-4334-8452-7640f63b0f39',
-              xsrc: 'AsheeHuang:3:ca54ca',
-              ysrc: 'AsheeHuang:3:f7ea94',
-              zsrc: 'AsheeHuang:3:1a01e0'
-            };
-            data = [trace1];
-            layout = {margin: {
-                r: 0,
-                t: 0,
-                b: 0,
-                l: 0
-              }};
-            Plotly.plot('plotly-div', {
-              data: data,
-              layout: layout
-            });
-              </script>
-            </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-          </div>
 
           <!-- DataTables Example -->
           <div class="card mb-3">
@@ -688,6 +630,10 @@
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
 
+          <p class="small text-center text-muted my-5">
+            <em>More table examples coming soon...</em>
+          </p>
+
         </div>
         <!-- /.container-fluid -->
 
@@ -718,4 +664,35 @@
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+
+    <!-- Demo scripts for this page-->
+    <script src="js/demo/datatables-demo.js"></script>
+
+  </body>
+
+</html>
