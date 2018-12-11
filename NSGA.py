@@ -1,13 +1,13 @@
 from Dispatch_Rule import Machine_Oriented
 from ReadData import *
 import random
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+# import matplotlib.pyplot as plt
+# from mpl_toolkits.mplot3d import Axes3D
 from DEA import DEA_analysis
 import numpy as np
 
 
-J = []
+
 def weights_generate(n = 6) :
     weights = [-1 for _ in range(n)]
     for i in range(n) :
@@ -24,25 +24,25 @@ def reset_J(J) :
         j.is_processed = False
 class NSGA(object) :
     class Gene(object) :
-        def __init__(self,weights):
+        def __init__(self,weights,J):
             self.weights = weights
             late,pieces,ft,_ = Machine_Oriented(J,4*60,weights)
             reset_J(J)
             self.obj = [late,ft,pieces]
-
             self.dist = None
         def dominate(self,gene2):
             if self.obj[0] <= gene2.obj[0] and self.obj[1] <= gene2.obj[1] and self.obj[2] >= gene2.obj[2] :
                 return True
             return False
-    def __init__(self,population,generation,crossover_rate = 0.8, mutation_rate = 0.3):
+    def __init__(self,population,generation,J,crossover_rate = 0.8, mutation_rate = 0.3):
         self.population = population
         self.generation = generation
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.pop = []
+        self.J = J
         for _ in range(self.population) :
-            self.pop.append(self.Gene(weights_generate()))
+            self.pop.append(self.Gene(weights_generate(),self.J))
 
     def run(self):
 
@@ -71,8 +71,6 @@ class NSGA(object) :
 
             self.pop = parents
             self.mutation(self.population // 10)
-            self.plot()
-
 
     def mutation(self,times = 5) :
         for t in range(times) :
@@ -89,8 +87,8 @@ class NSGA(object) :
                 sum_ = sum(self.pop[r].weights)
             for i in range(6):
                 self.pop[r].weights[i] /= sum_
-            late, pieces, ft, _ = Machine_Oriented(J, 4 * 60, self.pop[r].weights)
-            reset_J(J)
+            late, pieces, ft, _ = Machine_Oriented(self.J, 4 * 60, self.pop[r].weights)
+            reset_J(self.J)
             self.pop[r].obj = [late, ft, pieces]
 
     def nondominated_sort(self,remain = False):
@@ -141,7 +139,7 @@ class NSGA(object) :
         child_weight = []
         for i in range(len(c1.weights)) :
             child_weight.append((c1.weights[i] + c2.weights[i]) / 2)
-        child = self.Gene(child_weight)
+        child = self.Gene(child_weight,self.J)
         return child
     def plot(self,alpha = 1):
         fig = plt.figure()
@@ -168,26 +166,24 @@ class NSGA(object) :
 
 
 if __name__ == "__main__" :
-    path = './Normalized_data/data_1_360'
+    path = './static/instances/Normalized_data/data_1_360'
+    J = []
     ReadData(path,J)
-    ga = NSGA(300,5)
+    ga = NSGA(300,5,J)
     ga.run()
-    ga.plot()
     pareto = ga.nondominated_sort()[0]
-    plt.show()
+    print(pareto)
+
 
     input = [[] for _ in range(2)]
     output = [[]]
-
+    weights = []
     for point in pareto :
-
         input[0].append(point.obj[0])
         input[1].append(point.obj[1])
         output[0].append(point.obj[2])
+        weight.append(point.weight)
     res = (DEA_analysis(input, output))
     for idx,r in enumerate(res):
         # if r['Efficiency'] >= 1.0 :
         print(pareto[idx].weights,r)
-
-
-

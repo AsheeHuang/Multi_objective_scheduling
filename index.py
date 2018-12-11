@@ -3,19 +3,21 @@ import os
 import pandas
 from settings import APP_STATIC
 from ReadData import *
+from NSGA import *
 
 app = Flask(__name__)
 data = []
 x,y,z = [1],[1],[1]
+color = []
 data_path = "instances\\Normalized_data\\data_1_"
 instances_num = None
 @app.route("/")
 def hello():
     global x,y,z
-    return render_template("index.html",x = x,y = y,z = z,data = data)
+    return render_template("index.html",x = x,y = y,z = z, data = {})
 @app.route("/index.html")
 def index():
-    return render_template("index.html",x = x,y = y,z = z,data = data)
+    return render_template("index.html",x = x,y = y,z = z,data = {})
 
 @app.route("/charts.html")
 def charts() :
@@ -28,6 +30,7 @@ def tables() :
 @app.route('/<num>')
 def read_file(num) :
     global data,data_path,instances_num
+
     instances_num = num
     df = pandas.read_csv(os.path.join(APP_STATIC, data_path + num + ".csv"))
     data = [{} for i in range(len(df))]
@@ -39,19 +42,33 @@ def read_file(num) :
         data[i]["Priority"] = df["v"][i]
         data[i]["Temperature"] = df["T"][i]
         data[i]["Duedate"] = df["d"][i]
-    return render_template("index.html",x = x,y = y,z = z,data = data)
+    return render_template("index.html",x = x,y = y,z = z)
 @app.route('/run')
 def run() :
     global data_path,x,y,z,instances_num
-    x = [59, 67, 152, 790, 59, 70, 85, 55, 71, 85, 323, 73, 126, 58, 67, 67, 69, 324, 120, 70, 68, 166, 74, 192, 72, 359, 93, 171, 429, 90, 198, 427, 117, 239, 256, 101, 266, 285, 585, 233, 433, 130, 497, 621, 237, 871, 155, 128, 556, 248, 556, 510, 192, 273, 330, 339, 613, 298, 373, 180, 296, 64, 198, 219, 65, 65]
-    y = [13683, 14117, 12377, 11731, 14668, 14076, 13072, 15190, 13510, 13569, 12497, 13649, 12581, 14734, 14734, 15259, 14373, 12375, 12757, 14607, 14692, 12499, 13773, 12799, 14410, 11770, 13885, 13014, 12337, 14238, 12589, 12379, 13078, 12721, 12635, 15193, 12620, 12577, 12038, 12989, 12653, 13170, 12675, 11992, 12828, 12182, 13270, 13760, 12294, 13071, 12747, 12776, 13183, 13203, 12931, 12934, 12335, 14391, 12783, 12167, 12144, 14655, 12494, 12473, 14534, 14330]
-    z = [3238, 3294, 3364, 3480, 3531, 3544, 3577, 3625, 3627, 3631, 3639, 3642, 3643, 3648, 3651, 3653, 3656, 3661, 3669, 3674, 3675, 3677, 3684, 3695, 3699, 3715, 3716, 3717, 3719, 3736, 3737, 3740, 3741, 3744, 3750, 3757, 3759, 3763, 3765, 3767, 3768, 3768, 3770, 3773, 3777, 3779, 3783, 3783, 3790, 3792, 3795, 3798, 3802, 3805, 3814, 3815, 3827, 3849, 3850, 3507, 3575, 3626, 3561, 3566, 3562, 3504]
+    J = []
+    ReadData(os.path.join(APP_STATIC, data_path + str(instances_num)),J)
+    ga = NSGA(300,5,J)
+    ga.run()
+    pareto = ga.nondominated_sort()[0]
 
-    color = [0.933382961498267, 0.8960468817783473, 0.9283591207337067, 0.9398571591323812, 0.9669731358213229, 0.9537037892363022, 0.9971901103947197, 1.0, 1.0000000000000002, 0.9792172845581472, 0.9398235740015308, 0.9922717714225919, 0.9999999999999998, 1.0, 0.9632066170568926, 0.9396215610201907, 0.9735737077276388, 0.9535401799907492, 0.9999999999999999, 0.9631866658996722, 0.9674842079494312, 1.0, 0.994247445066525, 0.9742457132640191, 0.9709731002071464, 0.9999999999999999, 0.9719854987095148, 0.971535580483172, 0.95506792149713, 0.9592425416479118, 0.99870471961117, 0.9572021909635746, 1.0, 0.9776567934616345, 0.9799149339440638, 0.8988849450157529, 0.9801431335837198, 0.978194828145823, 0.9908964814650421, 0.9667653221827227, 0.9434850671389194, 0.9896396445336961, 0.9423473789557234, 0.9968110189206444, 0.9793140663934563, 0.9828244262158518, 0.9765678921978089, 0.9570853120759836, 0.9767055283727238, 0.9629377243429016, 0.9432383266809354, 0.9418412383245505, 0.9750488698391585, 0.9498874241636933, 0.9532096152234825, 0.9505983284003202, 0.9829625075219001, 0.8814406473878498, 0.9592174692041607, 0.9735550479058496, 0.9557890589472428, 0.9725510564990484, 0.9584249533913931, 0.9545484142761254, 0.9570767581661238, 0.9511522852878869]
-
-    # ReadData(os.path.join(APP_STATIC, data_path + instances_num),J)
-# #     ga = NSGA(100,5)
-    return render_template("index.html",x = x,y = y,z = z,color = color,data = data)
+    result = {}
+    input = [[] for _ in range(2)]
+    output = [[]]
+    weight = []
+    for point in pareto :
+        input[0].append(point.obj[0])#weighted tardiness
+        input[1].append(point.obj[1])#total_flow_time
+        output[0].append(point.obj[2])#pieces
+        weight.append(point.weights)
+    res = (DEA_analysis(input, output))
+    eff = [r['Efficiency'] for r in res]
+    result["weight"] = weight
+    result["Flow_time"] = input[1]
+    result["Tardiness"] = input[0]
+    result["Piece"] = output[0]
+    result["DEA_score"] = eff
+    return render_template("index.html",x = result["Tardiness"],y = result["Flow_time"],z = result["Piece"],color = result["DEA_score"],result = result)
 #
 
 if __name__ == "__main__" :

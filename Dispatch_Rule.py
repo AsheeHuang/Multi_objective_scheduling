@@ -19,7 +19,7 @@ def Machine_Oriented(J,d ,weight = None, machine_rule =  lambda x : x.load ) :
         if sel_m.avail == False : #no available machine
             break
         """"""
-        job_rule = lambda x: x.processing_time_n * weight[0] - x.pieces_n * weight[1] - x.weight_n * weight[2] + x.due_date_n * weight[3] + x.release_date_n * weight[4] + normalize_transfer_time(x.transfer_time(sel_m.Temperature)) * weight[5]
+        job_rule = lambda x: x.processing_time_n * weight[0] - x.pieces_n * weight[1] - x.weight_n * weight[2] + x.due_date_n * weight[3] - x.release_date_n * weight[4] + normalize_transfer_time(x.transfer_time(sel_m.Temperature)) * weight[5]
         """"""
         sel_job = sel_m.select_job(job_rule)
         if sel_job : #there is an available job

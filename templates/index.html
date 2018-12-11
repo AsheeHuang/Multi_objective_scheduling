@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" href="data:,">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>Multi-objective scheduling</title>
 
@@ -130,7 +131,8 @@
                 t: 0,
                 b: 0,
                 l: 0
-              }};
+              }
+            };
             Plotly.plot('plotly-div', {
               data: data,
               layout: layout
@@ -151,37 +153,50 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Dispatching Rule</th>
+                      <th>SPT</th>
+                      <th>HVF</th>
+                      <th>LP</th>
+                      <th>EDD</th>
+                      <th>FIFO</th>
+                      <th>SST</th>
                       <th>Flow Time</th>
                       <th>Tardiness</th>
                       <th>Pieces</th>
                       <th>DEA score</th>
-                      <th>Priority</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <th>Dispatching Rule</th>
+                      <th>SPT</th>
+                      <th>HVF</th>
+                      <th>LP</th>
+                      <th>EDD</th>
+                      <th>FIFO</th>
+                      <th>SST</th>
                       <th>Flow Time</th>
                       <th>Tardiness</th>
                       <th>Pieces</th>
                       <th>DEA score</th>
-                      <th>Priority</th>
 
                     </tr>
                   </tfoot>
                   <tbody>
-                    <!-- {% for d in data %}
-                      <tr>
-                        <td>{{d.Index}}</td>
-                        <td>{{d.Processing_Time}}</td>
-                        <td>{{d.Release_Time}}</td>
-                        <td>{{d.Pieces}}</td>
-                        <td>{{d.Priority}}</td>
-                        <td>{{d.Temperature}}</td>
-                        <td>{{d.Duedate}}</td>
-                      </tr>
-                    {% endfor %} -->
+                    {% if result %}
+                      {% for i in range(0, result.weight|length ) %}
+                          <tr>
+                            <td>{{ '%0.2f' % result.weight[i][0]}}</td>
+                            <td>{{ '%0.2f' % result.weight[i][1]}}</td>
+                            <td>{{ '%0.2f' % result.weight[i][2]}}</td>
+                            <td>{{ '%0.2f' % result.weight[i][3]}}</td>
+                            <td>{{ '%0.2f' % result.weight[i][4]}}</td>
+                            <td>{{ '%0.2f' % result.weight[i][5]}}</td>
+                            <td>{{result.Flow_time[i]}}</td>
+                            <td>{{result.Tardiness[i]}}</td>
+                            <td>{{result.Piece[i]}}</td>
+                            <td>{{ '%0.2f' % result.DEA_score[i]}}</td>
+                          </tr>
+                      {% endfor %}
+                    {% endif %}
                   </tbody>
                 </table>
               </div>
@@ -196,7 +211,7 @@
         <footer class="sticky-footer">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright 蝛� Your Website 2018</span>
+              <span>Copyright ��蕭 Your Website 2018</span>
             </div>
           </div>
         </footer>
