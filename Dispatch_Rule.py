@@ -1,10 +1,8 @@
 import copy
-import math
-import heapq
 from Machine import *
+from heapq import *
 from random import random
-from operator import attrgetter
-import time
+
 def Machine_Oriented(J,d ,weight = None, machine_rule =  lambda x : x.load ) :
     def normalize_transfer_time (transfer_time) :
         return (transfer_time - 0) / (15 - 0)
@@ -19,7 +17,7 @@ def Machine_Oriented(J,d ,weight = None, machine_rule =  lambda x : x.load ) :
         if sel_m.avail == False : #no available machine
             break
         """"""
-        job_rule = lambda x: x.processing_time_n * weight[0] - x.pieces_n * weight[1] - x.weight_n * weight[2] + x.due_date_n * weight[3] - x.release_date_n * weight[4] + normalize_transfer_time(x.transfer_time(sel_m.Temperature)) * weight[5]
+        job_rule = lambda x: x.processing_time_n * weight[0] - x.pieces_n * weight[1] - x.weight_n * weight[2] + x.due_date_n * weight[3] + x.release_date_n * weight[4] + normalize_transfer_time(x.transfer_time(sel_m.Temperature)) * weight[5] /2
         """"""
         sel_job = sel_m.select_job(job_rule)
         if sel_job : #there is an available job
@@ -30,8 +28,11 @@ def Machine_Oriented(J,d ,weight = None, machine_rule =  lambda x : x.load ) :
                 total_flow_time += (sel_job.starting_time + sel_job.processing_time) - sel_job.release_date
                 count += 1
                 # print("sel job :", sel_job , " to " , sel_m.index, " load : ",sel_m.load, sel_m.avail)
+    for j in J :
+        if j.is_processed == False :
+            total_flow_time += max(0,d - j.release_date)
 
-    return weighted_tatal_lateness ,Pieces_Produced ,total_flow_time , count
+    return weighted_tatal_lateness ,Pieces_Produced ,total_flow_time / len(J) , count
 def prob_model(J,d, machine_rule =  lambda x : x.load ,prob = None ) :
     def normalize_transfer_time (transfer_time) :
         return (transfer_time - 0) / (15 - 0)

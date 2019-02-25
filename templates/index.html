@@ -183,14 +183,14 @@
                   <tbody>
                     {% if result %}
                       {% for i in range(0, result.weight|length ) %}
-                          <tr>
+                          <tr name = 'row'+str(i) >
                             <td>{{ '%0.2f' % result.weight[i][0]}}</td>
                             <td>{{ '%0.2f' % result.weight[i][1]}}</td>
                             <td>{{ '%0.2f' % result.weight[i][2]}}</td>
                             <td>{{ '%0.2f' % result.weight[i][3]}}</td>
                             <td>{{ '%0.2f' % result.weight[i][4]}}</td>
                             <td>{{ '%0.2f' % result.weight[i][5]}}</td>
-                            <td>{{result.Flow_time[i]}}</td>
+                            <td>{{ '%0.2f' % result.Flow_time[i]}}</td>
                             <td>{{result.Tardiness[i]}}</td>
                             <td>{{result.Piece[i]}}</td>
                             <td>{{ '%0.2f' % result.DEA_score[i]}}</td>

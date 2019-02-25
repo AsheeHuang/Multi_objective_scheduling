@@ -26,7 +26,7 @@ class NSGA(object) :
     class Gene(object) :
         def __init__(self,weights,J):
             self.weights = weights
-            late,pieces,ft,_ = Machine_Oriented(J,4*60,weights)
+            late,pieces,ft,_ = Machine_Oriented(J,3*60,weights)
             reset_J(J)
             self.obj = [late,ft,pieces]
             self.dist = None
@@ -131,7 +131,7 @@ class NSGA(object) :
             F.sort(key = lambda x : x.obj[m])
             F[0].dist,F[N-1].dist = float('inf'),float('inf')
             for i in range(1,N-1) :
-                F[i].dist += (F[i+1].obj[m] - F[i-1].obj[m]) / (F[N-1].obj[m] - F[0].obj[m])
+                F[i].dist += (F[i+1].obj[m] - F[i-1].obj[m]) / ((F[N-1].obj[m] - F[0].obj[m]) +1 )
         # for i in range(N) :
         #     print(F[i].dist)
 
@@ -169,7 +169,7 @@ if __name__ == "__main__" :
     path = './static/instances/Normalized_data/data_1_360'
     J = []
     ReadData(path,J)
-    ga = NSGA(300,5,J)
+    ga = NSGA(300,1,J)
     ga.run()
     pareto = ga.nondominated_sort()[0]
     print(pareto)

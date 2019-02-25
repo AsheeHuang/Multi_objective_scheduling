@@ -48,9 +48,9 @@ def run() :
     global data_path,x,y,z,instances_num
     J = []
     ReadData(os.path.join(APP_STATIC, data_path + str(instances_num)),J)
-    ga = NSGA(300,5,J)
+    ga = NSGA(1000,0,J)
     ga.run()
-    pareto = ga.nondominated_sort()[0]
+    pareto = ga.nondominated_sort()[0] + ga.nondominated_sort()[1] + ga.nondominated_sort()[2]
 
     result = {}
     input = [[] for _ in range(2)]
