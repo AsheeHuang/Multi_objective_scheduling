@@ -5,11 +5,11 @@ from random import random
 
 def Machine_Oriented(J,d ,weight = None, machine_rule =  lambda x : x.load ) :
     def normalize_transfer_time (transfer_time) :
-        return (transfer_time - 0) / (15 - 0)
+        return (transfer_time - 0) / (10 - 0)
 
     machines = Machines(J)
     Pieces_Produced, count = 0,0
-    weighted_tatal_lateness = 0
+    total_weighted_tardiness = 0
     total_flow_time = 0
     #job_assigned = [False for _ in range(len(J))] #initially unassigned
     while not machines.reach_deadline() : #does not reach deadline
@@ -17,22 +17,38 @@ def Machine_Oriented(J,d ,weight = None, machine_rule =  lambda x : x.load ) :
         if sel_m.avail == False : #no available machine
             break
         """"""
-        job_rule = lambda x: x.processing_time_n * weight[0] - x.pieces_n * weight[1] - x.weight_n * weight[2] + x.due_date_n * weight[3] + x.release_date_n * weight[4] + normalize_transfer_time(x.transfer_time(sel_m.Temperature)) * weight[5] /2
+        job_rule = lambda x: x.processing_time_n * weight[0] - x.pieces_n * weight[1] - x.weight_n * weight[2] + x.due_date_n * weight[3] - x.release_date_n * weight[4] + normalize_transfer_time(x.transfer_time(sel_m.Temperature)) * weight[5]
         """"""
         sel_job = sel_m.select_job(job_rule)
         if sel_job : #there is an available job
-            insert_success = sel_m.assign_job(sel_job,d)
+            insert_success = sel_m.assign_job(sel_job, d)
             if insert_success :#if insert int this job does not reach deadline
                 Pieces_Produced += sel_job.pieces
-                weighted_tatal_lateness += max(0,sel_m.load - sel_job.due_date) * sel_job.weight
+                total_weighted_tardiness += max(0,sel_m.load - sel_job.due_date) * sel_job.weight
                 total_flow_time += (sel_job.starting_time + sel_job.processing_time) - sel_job.release_date
                 count += 1
                 # print("sel job :", sel_job , " to " , sel_m.index, " load : ",sel_m.load, sel_m.avail)
     for j in J :
         if j.is_processed == False :
-            total_flow_time += max(0,d - j.release_date)
+            # total_flow_time +=  max(0,d + j.processing_time - j.release_date)
+            total_weighted_tardiness += j.weight * max(0, d + j.processing_time - j.due_date)
+    reset_J(J)
+    # print(total_weighted_tardiness ,Pieces_Produced ,total_flow_time ,len(J))
+    return total_weighted_tardiness/len(J), total_flow_time/count, Pieces_Produced  , count
 
-    return weighted_tatal_lateness ,Pieces_Produced ,total_flow_time / len(J) , count
+def get_single_rule_obj(Job_set, common_due_date) :
+    results = []
+    #SPT, HV, LP, EDD, FIFO, SST
+    for i in range(6) :
+        weight = [0 for _ in range(6)]
+        weight[i] = 1
+        lateness, flowtime, pieces, _ = Machine_Oriented(Job_set, common_due_date, weight)
+        results.append([lateness, flowtime, pieces])
+    # weight = [1/6 for _ in range(6)]
+    # lateness, flowtime, pieces, _ = Machine_Oriented(Job_set, common_due_date, weight)
+    # results.append([lateness, flowtime, pieces])
+    return results
+
 def prob_model(J,d, machine_rule =  lambda x : x.load ,prob = None ) :
     def normalize_transfer_time (transfer_time) :
         return (transfer_time - 0) / (15 - 0)
@@ -631,3 +647,8 @@ def count_LFJ_value(Mj,Machine_Avail):
         if Machine_Avail[j]==True :
             count+=1
     return count
+
+
+def reset_J(J):
+    for j in J:
+        j.is_processed = False

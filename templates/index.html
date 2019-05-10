@@ -23,6 +23,9 @@
 
     <!-- Custom styles for this template-->
     <link href="/static/css/sb-admin.css" rel="stylesheet">
+    <link href="/static/css/multi-level-dropdown.css" rel="stylesheet">
+
+
 
   </head>
 
@@ -50,12 +53,12 @@
         <li class="nav-item">
           <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
+            <span>Gannt Charts</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="tables.html">
             <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
+            <span>Data</span></a>
         </li>
       </ul>
 
@@ -74,24 +77,38 @@
           <!-- Icon Cards-->
           <div class="row">
             <div class="nav-item dropdown col-xl-2 col-sm-6 mb-3 text-center">
-              <a class="card nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span>Select Instance</span>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" method='post'>
+                Select Instances
+                </button>
+              <div class="dropdown-menu multi-level" role="menu" aria-labelledby="pagesDropdown">
                 <script language = "javascript" type="text/javascript">
-                  for(var i = 200 ; i < 500 ; i = i + 20)
-                    document.write('<a class="dropdown-item" href = "'+i+'">' + i +'.csv</a>"')
+                  for(var i = 65 ; i < 75 ; i++){
+                    var problem_set = String.fromCharCode(i);
+                    document.write('<li class="dropdown-submenu">')
+                    document.write('<a class="dropdown-item" href = "">' + problem_set + '</a>')
+                    document.write('<ul class="dropdown-menu">')
+                    for(var j = 1 ; j < 11 ; j++){
+                      var instance_num = problem_set + j.toString()
+                      document.write('<li class="dropdown-item select_ins" id="'+instance_num+'">'+j+'</li>')
+                    }
+                    document.write('</ul>')
+                    document.write('</li>')
+                  }
                 </script>
               </div>
             </div>
             <div class="col-xl-3 col-sm-6 mb-3">
+
             </div>
             <div class="col-xl-4 col-sm-6 mb-3">
             </div>
             <div class="col-xl-2 col-sm-6 mb-3">
-              <div class="card text-white bg-danger text-center ">
-                <div class="card-body">
-                  <a href = "run" style="color:white; text-decoration:none"> Run </a>
+              <div class="card text-white text-center " style = "background-color:red">
+                  <form action = "/run" >
+                    <p hidden><input name="instance" type="text" value = ""></p>
+                    <input class = "btn"type = "submit" value = "Run" style = "background-color: red;color:white;"/>
+
+
                 </div>
               </div>
             </div>
@@ -101,16 +118,16 @@
           <div class="card mb-3">
             <div class="card-header">
               <i class="fas fa-chart-area"></i>
-              Area Chart Example</div>
+              Plot Chart</div>
             <div class="card-body">
-              <div id="plotly-div"></div>
+              <div id="plotly-div" style="align:center"></div>
                 <script>
                   trace1 = {
-                    x : {{x}},
-                    y : {{y}},
-                    z : {{z}},
+                    x : {{result.Tardiness}},
+                    y : {{result.Flow_time}},
+                    z : {{result.Piece}},
               marker: {
-                color: {{color}},
+                color: {{result.DEA_score}},
                 colorscale: 'Viridis',
                 colorsrc: 'AsheeHuang:3:5d8d3c',
                 colorbar: {title : "DEA analysis",
@@ -163,6 +180,7 @@
                       <th>Tardiness</th>
                       <th>Pieces</th>
                       <th>DEA score</th>
+                      <th>Gannt</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -177,6 +195,8 @@
                       <th>Tardiness</th>
                       <th>Pieces</th>
                       <th>DEA score</th>
+                      <th>Gannt</th>
+
 
                     </tr>
                   </tfoot>
@@ -194,6 +214,7 @@
                             <td>{{result.Tardiness[i]}}</td>
                             <td>{{result.Piece[i]}}</td>
                             <td>{{ '%0.2f' % result.DEA_score[i]}}</td>
+                            <td><button class="btn">Generate</button></td>
                           </tr>
                       {% endfor %}
                     {% endif %}
@@ -211,7 +232,7 @@
         <footer class="sticky-footer">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright ��蕭 Your Website 2018</span>
+              <span>Copyright Your Website 2018</span>
             </div>
           </div>
         </footer>
@@ -264,7 +285,7 @@
       <!-- Demo scripts for this page-->
       <script src="static/js/demo/datatables-demo.js"></script>
       <script src="static/js/demo/datatables-demo.js"></script>
-
+    <script src="static/js/demo/click.js"></script>
       <script src="static/js/read_file.js"></script>
 
     </body>

@@ -1,38 +1,38 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import os
 import pandas
 from settings import APP_STATIC
 from ReadData import *
 from NSGA import *
+from DEA import DEA_analysis
 
 app = Flask(__name__)
 data = []
 x,y,z = [1],[1],[1]
 color = []
-data_path = "instances\\Normalized_data\\data_1_"
-instances_num = None
+result = {}
+problem_set, instance_num = None, None
+data_path = "instances\\Exp_data2\\data_"
 @app.route("/")
 def hello():
-    global x,y,z
-    return render_template("index.html",x = x,y = y,z = z, data = {})
+    global result
+    return render_template("index.html",result = result, data = {})
 @app.route("/index.html")
 def index():
-    return render_template("index.html",x = x,y = y,z = z,data = {})
+    global result
+    return render_template("index.html",result = result,data = {})
 
 @app.route("/charts.html")
 def charts() :
     return render_template("charts.html")
 @app.route("/tables.html")
 def tables() :
-    global data
-    print(data,flush = True)
+    data = read_file()
     return render_template("tables.html",data = data)
-@app.route('/<num>')
-def read_file(num) :
-    global data,data_path,instances_num
 
-    instances_num = num
-    df = pandas.read_csv(os.path.join(APP_STATIC, data_path + num + ".csv"))
+def read_file() :
+    global data,data_path,problem_set, instance_num
+    df = pandas.read_csv(os.path.join(APP_STATIC, data_path + str(problem_set) + "_"+str(instance_num)+".csv"))
     data = [{} for i in range(len(df))]
     for i in range(len(df)) :
         data[i]["Index"] = i
@@ -42,17 +42,25 @@ def read_file(num) :
         data[i]["Priority"] = df["v"][i]
         data[i]["Temperature"] = df["T"][i]
         data[i]["Duedate"] = df["d"][i]
-    return render_template("index.html",x = x,y = y,z = z)
-@app.route('/run')
-def run() :
-    global data_path,x,y,z,instances_num
-    J = []
-    ReadData(os.path.join(APP_STATIC, data_path + str(instances_num)),J)
-    ga = NSGA(1000,0,J)
-    ga.run()
-    pareto = ga.nondominated_sort()[0] + ga.nondominated_sort()[1] + ga.nondominated_sort()[2]
+    return data
 
-    result = {}
+@app.route('/run', methods=['POST','GET'])
+def run() :
+    global data_path, problem_set, instance_num
+    if request.method == 'POST':
+        print(request.form, flush=True)
+        return
+    else:
+        instance = request.args.get('instance')
+        if instance == "" :
+            return render_template("index.html",x = x,y = y,z = z)
+    J = []
+    problem_set = instance[:1]
+    instance_num = instance[1:]
+    ReadData(os.path.join(APP_STATIC, data_path + problem_set + "_"+instance_num),J)
+    ga = NSGA(500,3,Job_set = J,common_due_date=120)
+    ga.run()
+    pareto = [item for sublist in ga.nondominated_sort() for item in sublist]
     input = [[] for _ in range(2)]
     output = [[]]
     weight = []
@@ -68,9 +76,10 @@ def run() :
     result["Tardiness"] = input[0]
     result["Piece"] = output[0]
     result["DEA_score"] = eff
-    return render_template("index.html",x = result["Tardiness"],y = result["Flow_time"],z = result["Piece"],color = result["DEA_score"],result = result)
+    return render_template("index.html",result = result)
 #
 
 if __name__ == "__main__" :
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+    app.debug = True
     app.run(Debug = True)
